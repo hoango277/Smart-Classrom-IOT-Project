@@ -11,7 +11,7 @@ DataSet/
 *.jpg
 
 # Secrets file - chứa thông tin nhạy cảm
-secrets.h
+**/secrets.h
 
 # Arduino build files
 *.hex
