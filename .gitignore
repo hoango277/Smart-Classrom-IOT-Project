@@ -7,3 +7,5 @@ SourceCode/MTCNN_FaceNet/.vscode/
 *.ckpt*
 Models/
 DataSet/
+*.png
+*.jpg
