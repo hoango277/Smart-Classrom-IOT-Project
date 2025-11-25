@@ -1,0 +1,11 @@
+SourceCode/MTCNN_FaceNet/DataSet/
+SourceCode/MTCNN_FaceNet/Models/20180402-114759/
+__pycache__/
+venv/
+SourceCode/MTCNN_FaceNet/.vscode/
+*.pb
+*.ckpt*
+Models/
+DataSet/
+*.png
+*.jpg
