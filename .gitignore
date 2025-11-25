@@ -9,3 +9,25 @@ Models/
 DataSet/
 *.png
 *.jpg
+
+# Secrets file - chứa thông tin nhạy cảm
+**/secrets.h
+
+# Arduino build files
+*.hex
+*.elf
+*.bin
+build/
+*.cache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
