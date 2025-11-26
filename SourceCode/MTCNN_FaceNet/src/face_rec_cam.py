@@ -2,7 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from imutils.video import VideoStream
 
 
@@ -32,7 +33,7 @@ def main():
     INPUT_IMAGE_SIZE = 160
     CLASSIFIER_PATH = 'Models/facemodel.pkl'
     VIDEO_PATH = args.path
-    FACENET_MODEL_PATH = 'Models/20180402-114759.pb'
+    FACENET_MODEL_PATH = 'Models/20180402-114759/20180402-114759.pb'
 
     # Load The Custom Classifier
     with open(CLASSIFIER_PATH, 'rb') as file:
