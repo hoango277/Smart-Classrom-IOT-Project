@@ -1,0 +1,24 @@
+// Global configuration macros for ESP32-CAM firmware
+#pragma once
+
+#define DOOR_MOVE_MS 5000
+#define WINDOW_MOVE_MS 5000
+#define AUTO_CLOSE_MS 30000
+#define CAPTURE_INTERVAL_MS 10000
+
+#define SENSOR_POLL_MS 200
+#define EVENT_COOLDOWN_MS 1000
+
+#define NUM_DOORS 2
+#define NUM_WINDOWS 2
+#define NUM_LIGHTS 2
+#define NUM_ALARMS 2
+
+#define TOPIC_EVENTS "classroom/events"
+#define TOPIC_BASE_DOOR_CMD "classroom/door/"
+#define TOPIC_BASE_WINDOW_CMD "classroom/window/"
+#define TOPIC_BASE_LIGHT_CMD "classroom/light/"
+#define TOPIC_BASE_ALARM_CMD "classroom/alarm/"
+
+#define MQTT_CLIENT_ID "smart-classroom-cam"
+#define MAX_TOPIC_LENGTH 96
