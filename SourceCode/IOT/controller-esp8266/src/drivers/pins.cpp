@@ -12,8 +12,8 @@ const MotorPins WINDOW_PINS[NUM_WINDOWS] = {
 };
 
 const DigitalChannelPins LIGHT_PINS[NUM_LIGHTS] = {
-    {UNUSED_PIN, false},  // Light 1: unwired
-    {UNUSED_PIN, false}   // Light 2: unwired
+    {FIRE_LED_PIN, false},  // Light 1: Fire alarm LED on D3 (GPIO0)
+    {UNUSED_PIN, false}      // Light 2: unwired placeholder
 };
 
 const DigitalChannelPins ALARM_PINS[NUM_ALARMS] = {

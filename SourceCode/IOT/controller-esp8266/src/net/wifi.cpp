@@ -1,7 +1,7 @@
 // Wi-Fi interface stubs
 #include <Arduino.h>
 #include "wifi.h"
-#include "../../include/secrets.h"
+#include "secrets.h"
 
 void wifi_init()
 {

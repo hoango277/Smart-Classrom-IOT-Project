@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 #include "mqtt.h"
 #include "../../include/config.h"
-#include "../../include/secrets.h"
+#include "secrets.h"
 
 void mqtt_init()
 {
