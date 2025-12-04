@@ -6,7 +6,7 @@
 
 static bool valid_id(int id)
 {
-  return id >= 1 && id <= NUM_DOORS;
+  return id >= 0  && id < NUM_DOORS;
 }
 
 static bool wired(int id)
@@ -31,10 +31,13 @@ void doors_init()
       set_outputs(DOOR_PINS[i], LOW, LOW); 
     }
   }
+  Serial.println("[Doors] Initialized");
 }
 
 void door_open(int id)
 {
+  Serial.print("[door] open called for id ");
+  Serial.println(id);
   if (!valid_id(id))
   {
     Serial.println("[door] invalid id");
@@ -45,18 +48,20 @@ void door_open(int id)
     Serial.println("[door] unwired door");
     return;
   }
-  const MotorPins &p = DOOR_PINS[id - 1];
+  const MotorPins &p = DOOR_PINS[id];
   // Direction: IN1=HIGH, IN2=LOW -> open
   set_outputs(p, HIGH, LOW);
 }
 
 void door_close(int id)
 {
+  Serial.print("[door] close called for id ");
+  Serial.println(id);
   if (!valid_id(id) || !wired(id))
   {
     return;
   }
-  const MotorPins &p = DOOR_PINS[id - 1];
+  const MotorPins &p = DOOR_PINS[id];
   // Direction: IN1=LOW, IN2=HIGH -> close
   set_outputs(p, LOW, HIGH);
 }
@@ -67,6 +72,8 @@ void door_stop(int id)
   {
     return;
   }
-  const MotorPins &p = DOOR_PINS[id - 1];
+  const MotorPins &p = DOOR_PINS[id];
   set_outputs(p, LOW, LOW);
+  Serial.print("[door] stop called for id ");
+  Serial.println(id);
 }
