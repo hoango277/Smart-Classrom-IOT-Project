@@ -1,6 +1,10 @@
 // Global configuration macros for controller firmware
 #pragma once
 
+// WiFi Configuration
+#define WIFI_SSID "Duy Anh"
+#define WIFI_PASS "22122004"
+
 #define DOOR_MOVE_MS 5000
 #define WINDOW_MOVE_MS 5000
 #define AUTO_CLOSE_MS 30000
@@ -22,3 +26,8 @@
 
 #define MQTT_CLIENT_ID "smart-classroom-controller"
 #define MAX_TOPIC_LENGTH 96
+
+#define MQTT_HOST "e5b0f46cb77d48c783a870d85ddabdd2.s1.eu.hivemq.cloud"
+#define MQTT_PORT 8883
+#define MQTT_USER "smart_classroom"
+#define MQTT_PASS "Smartclassroom15"
