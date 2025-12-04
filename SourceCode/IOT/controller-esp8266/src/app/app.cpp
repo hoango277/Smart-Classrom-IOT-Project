@@ -31,4 +31,5 @@ void app_tick()
   wifi_loop();
   mqtt_loop();
   utils_tick();
+  Serial.println("hello");
 }
