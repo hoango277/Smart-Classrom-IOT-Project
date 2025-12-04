@@ -5,6 +5,7 @@
 void utils_init()
 {
   // TODO: implement utility init
+  Serial.begin(115200);
 }
 
 void utils_tick()
