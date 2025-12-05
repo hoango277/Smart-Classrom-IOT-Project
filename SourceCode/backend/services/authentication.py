@@ -28,16 +28,16 @@ class AuthenticationService:
         if user is None:
             return raise_error(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                message="Invalid username or password"
+                message='Invalid username or password'
             )
 
         if not verify_password(data.password, user.hashed_password):
             return raise_error(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                message="Invalid username or password"
+                message='Invalid username or password'
             )
 
         return TokenResponse(access_token=create_access_token(
-            data={"sub": user.username, "id": user.id, "role": user.role},
+            data={'sub': user.username, 'id': user.id, 'role': user.role},
             expired_delta=timedelta(minutes=60)
         ))

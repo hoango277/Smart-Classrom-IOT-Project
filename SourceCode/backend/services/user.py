@@ -23,4 +23,4 @@ class UserService:
         db.add(new_user)
         await db.commit()
         await db.refresh(new_user)
-        return BaseResponse(message="User created successfully")
+        return BaseResponse(message='User created successfully')

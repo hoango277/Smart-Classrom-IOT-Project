@@ -8,13 +8,13 @@ from routers import authentication, user
 app = FastAPI()
 
 
-@app.on_event("startup")
+@app.on_event('startup')
 async def on_startup():
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
-@app.on_event("shutdown")
+@app.on_event('shutdown')
 async def on_shutdown():
     await async_engine.dispose()
 
