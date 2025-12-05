@@ -9,6 +9,7 @@
 #include "../drivers/lights.h"
 #include "../drivers/alarms.h"
 #include "../drivers/sensors.h"
+#include "../drivers/dht.h"
 #include "../drivers/buzzer.h"
 #include "../utils/helpers.h"
 
@@ -22,6 +23,7 @@ void app_begin()
   lights_init();
   alarms_init();
   sensors_init();
+  dht_init();
   buzzer_init();
   utils_init();
 }
@@ -79,6 +81,17 @@ void app_tick()
       Serial.print(rain ? "DETECTED" : "OK");
       Serial.print(" (raw=");
       Serial.print(rain_raw);
+      Serial.print(") | Temp: ");
+      float humidity = 0.0f, tempC = 0.0f;
+      if (dht_read(&humidity, &tempC)) {
+        Serial.print(tempC, 1);
+        Serial.print("C");
+        Serial.print(" | Humidity: ");
+        Serial.print(humidity, 0);
+        Serial.print("%");
+      } else {
+        Serial.print("ERR | Humidity: ERR");
+      }
       Serial.println(")");
     }
   }

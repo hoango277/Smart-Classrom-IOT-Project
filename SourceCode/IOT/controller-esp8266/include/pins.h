@@ -22,6 +22,7 @@ extern const DigitalChannelPins ALARM_PINS[NUM_ALARMS];
 
 #define FLAME_SENSOR_PIN 13   // D7, active LOW
 #define RAIN_SENSOR_PIN 16    // D0, active LOW
+#define DHT11_PIN 10          // S3, DHT11 data (ensure pull-up, mindful of boot)
 #define BUZZER_PIN 2          // D4, active LOW
 #define FIRE_LED_PIN 0        // D3 (GPIO0), for fire alarm LED
 
