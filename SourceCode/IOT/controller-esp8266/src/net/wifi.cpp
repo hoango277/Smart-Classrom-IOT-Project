@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include "wifi.h"
-#include "secrets.h"
+#include "../include/secrets.h"
 #include "../../include/config.h"
 
 void wifi_init()

@@ -6,7 +6,7 @@
 #include <ArduinoJson.h>
 #include "mqtt.h"
 #include "../../include/config.h"
-#include "secrets.h"
+#include "../../include/secrets.h"
 #include "../drivers/doors.h"
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
