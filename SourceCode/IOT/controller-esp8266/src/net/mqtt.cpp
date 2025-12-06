@@ -130,9 +130,7 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
   Serial.print("]: ");
   Serial.println(message);
 
-  // Parse device ID from topic
   int deviceId = -1;
-
   // Handle door commands
   if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
   {

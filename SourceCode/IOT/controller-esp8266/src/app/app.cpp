@@ -51,6 +51,9 @@ void app_tick()
         Serial.println("[ALARM] FIRE DETECTED! Buzzer ON, LED ON");
         buzzer_on();
         door_open(0);
+        window_open(0);
+        // door_stop(0); 
+        // window_stop(0);
         light_on(0);  // Light 0 = Fire alarm LED
       }
     } else {
@@ -59,6 +62,9 @@ void app_tick()
         Serial.println("[ALARM] Fire cleared. Buzzer OFF, LED OFF");
         buzzer_off();
         door_close(0);
+        window_close(0);
+        // door_stop(0);
+        // window_stop(0);
         light_off(0);
       }
     }
@@ -72,6 +78,7 @@ void app_tick()
       int flame_raw = digitalRead(FLAME_SENSOR_PIN);
       int rain_raw = digitalRead(RAIN_SENSOR_PIN);
       bool rain = read_rain();
+
       
       Serial.print("[Sensors] Flame: ");
       Serial.print(flame ? "DETECTED" : "OK");
