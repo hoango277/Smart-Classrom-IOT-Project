@@ -69,12 +69,8 @@ static void trigger_fire_stop() {
   // Stop everything
   buzzer_off();
   for (int i = 0; i < NUM_LIGHTS; ++i) light_off(i);
-  
-  // Optional: Do we close doors? Usually manual reset is safer.
-  // But we should stop motors if they are running?
-  // They should have stopped after 3s anyway.
-  
-  // Publish
+  for (int i = 0; i < NUM_DOORS; ++i) door_stop(i);
+  for (int i = 0; i < NUM_WINDOWS; ++i) window_stop(i);
   char topic[MAX_TOPIC_LENGTH];
   snprintf(topic, MAX_TOPIC_LENGTH, "%s0/cmd", TOPIC_BASE_ALARM_CMD);
   mqtt_publish(topic, "cleared");
