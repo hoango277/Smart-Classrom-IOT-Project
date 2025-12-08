@@ -5,7 +5,6 @@
 #include "../drivers/doors.h"
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
-#include "../drivers/alarms.h"
 
 // Helper functions for specific device types
 static void handle_door_command(int deviceId, const String &message)

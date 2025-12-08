@@ -8,7 +8,6 @@
 #include "../drivers/doors.h"
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
-#include "../drivers/alarms.h"
 #include "../utils/helpers.h"
 
 void app_begin()
@@ -18,7 +17,6 @@ void app_begin()
   doors_init();
   windows_init();
   lights_init();
-  alarms_init();
   utils_init();
   sensor_manager_init();
 }
