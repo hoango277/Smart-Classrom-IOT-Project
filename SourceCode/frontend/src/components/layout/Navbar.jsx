@@ -1,10 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const username = localStorage.getItem('username');
+
+    const handleLogout = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('token_type');
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');
+        navigate('/login');
+    };
+
     return (
         <div className="h-20 w-full flex items-center justify-between px-8 bg-transparent">
-            {/* Left side empty or Breadcrumbs if needed */}
-            <div></div>
+            {/* Left side - Username */}
+            <div className="text-white">
+                {username && (
+                    <span className="text-sm text-text-muted">
+                        Welcome, <span className="text-white font-bold">{username}</span>
+                    </span>
+                )}
+            </div>
 
             {/* Right Actions */}
             <div className="flex items-center gap-6">
@@ -25,7 +43,11 @@ const Navbar = () => {
                 </button>
 
                 {/* Logout */}
-                <button className="text-text-muted hover:text-secondary transition-colors" title="Logout">
+                <button
+                    onClick={handleLogout}
+                    className="text-text-muted hover:text-secondary transition-colors"
+                    title="Logout"
+                >
                     <LogOutIcon />
                 </button>
             </div>

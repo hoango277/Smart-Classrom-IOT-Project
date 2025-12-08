@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import axiosInstance from '../config/axios';
 
 const Login = () => {
@@ -17,17 +18,52 @@ const Login = () => {
         setLoading(true);
 
         try {
-            // Assuming API expects username/password
-            const response = await axiosInstance.post('/auth/login', formData);
+            // Create form data as x-www-form-urlencoded
+            const urlEncodedData = new URLSearchParams();
+            urlEncodedData.append('username', formData.username);
+            urlEncodedData.append('password', formData.password);
 
-            // Store token (assuming response format)
-            if (response.token) {
-                localStorage.setItem('token', response.token);
+            const response = await axios.post(
+                'http://127.0.0.1:8000/api/auth/login',
+                urlEncodedData,
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            );
+
+            // Store tokens (response: {access_token, token_type})
+            if (response.data.access_token) {
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('token_type', response.data.token_type);
+                localStorage.setItem('username', formData.username);
+
+                // Fetch user profile to get role
+                try {
+                    const profileResponse = await axiosInstance.get('/users/me', {
+                        headers: {
+                            'Authorization': `Bearer ${response.data.access_token}`
+                        }
+                    });
+
+                    // Response: { id: number, username: string, role: string }
+                    if (profileResponse.role) {
+                        localStorage.setItem('role', profileResponse.role);
+                    }
+                } catch (profileErr) {
+                    console.error('Failed to fetch user profile:', profileErr);
+                    // Continue anyway, role might not be required for basic access
+                }
             }
 
-            navigate('/');
+            navigate('/dashboard');
         } catch (err) {
-            setError(err.message || 'Login failed. Please try again.');
+            if (err.response?.status === 401) {
+                setError(err.response.data?.message || 'Invalid username or password');
+            } else {
+                setError(err.message || 'Login failed. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -73,14 +109,6 @@ const Login = () => {
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         />
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                        <label className="flex items-center gap-2 text-text-muted cursor-pointer">
-                            <input type="checkbox" className="rounded bg-background border-text-muted/20" />
-                            Example Check
-                        </label>
-                        <Link to="#" className="text-primary hover:text-white transition-colors">Forgot password?</Link>
                     </div>
 
                     <button
