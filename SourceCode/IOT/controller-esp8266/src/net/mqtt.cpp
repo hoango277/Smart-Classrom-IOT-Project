@@ -68,6 +68,11 @@ bool mqtt_reconnect()
     // Subscribe to command topics
     char topic[MAX_TOPIC_LENGTH];
 
+    // Subscribe to OTA update topic
+    mqttClient.subscribe(TOPIC_OTA_UPDATE);
+    Serial.print("[MQTT] Subscribed: ");
+    Serial.println(TOPIC_OTA_UPDATE);
+
     // Subscribe to all door commands
     for (int i = 0; i < NUM_DOORS; ++i)
     {
