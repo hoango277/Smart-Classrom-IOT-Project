@@ -5,7 +5,6 @@
 #include "../drivers/doors.h"
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
-#include "../drivers/alarms.h"
 #include "../net/ota.h"
 
 static void handle_ota_update(const String &message)
