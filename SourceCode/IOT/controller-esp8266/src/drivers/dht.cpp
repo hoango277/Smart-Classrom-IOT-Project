@@ -21,7 +21,7 @@ bool dht_read(float *humidity, float *tempC)
     return false;
 
   float h = dht.readHumidity();
-  float t = dht.readTemperature();  // Celsius
+  float t = dht.readTemperature(); // Celsius
 
   if (isnan(h) || isnan(t))
     return false;

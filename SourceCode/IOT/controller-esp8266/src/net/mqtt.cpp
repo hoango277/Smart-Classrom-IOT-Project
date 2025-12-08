@@ -140,28 +140,28 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
   int deviceId = -1;
 
   // Handle OTA update command
-  // if (strcmp(topic, TOPIC_OTA_UPDATE) == 0)
-  // {
-  //   // Expected message format: {"url": "http://your-server.com/api/firmware/download"}
-  //   JsonDocument doc;
-  //   DeserializationError error = deserializeJson(doc, message);
+  if (strcmp(topic, TOPIC_OTA_UPDATE) == 0)
+  {
+    // Expected message format: {"url": "http://your-server.com/api/firmware/download"}
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, message);
 
-  //   if (!error && doc.containsKey("url"))
-  //   {
-  //     String firmwareUrl = doc["url"].as<String>();
-  //     Serial.print("[MQTT] OTA update requested from: ");
-  //     Serial.println(firmwareUrl);
+    if (!error && doc.containsKey("url"))
+    {
+      String firmwareUrl = doc["url"].as<String>();
+      Serial.print("[MQTT] OTA update requested from: ");
+      Serial.println(firmwareUrl);
 
-  //     // Trigger OTA update
-  //     ota_trigger_update(firmwareUrl.c_str());
-  //   }
-  //   else
-  //   {
-  //     Serial.println("[MQTT] Invalid OTA message format");
-  //     mqtt_publish(TOPIC_OTA_STATUS, "{\"status\":\"failed\",\"reason\":\"invalid_format\"}");
-  //   }
-  //   return;
-  // }
+      // Trigger OTA update
+      ota_trigger_update(firmwareUrl.c_str());
+    }
+    else
+    {
+      Serial.println("[MQTT] Invalid OTA message format");
+      mqtt_publish(TOPIC_OTA_STATUS, "{\"status\":\"failed\",\"reason\":\"invalid_format\"}");
+    }
+    return;
+  }
 
   // Handle door commands
   if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
