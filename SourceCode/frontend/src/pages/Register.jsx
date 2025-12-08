@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axiosInstance from '../config/axios';
+import axios from 'axios';
 
 const Register = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
-        email: '',
         password: '',
         confirmPassword: '',
+        role: 'student', // Default role
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -17,6 +17,13 @@ const Register = () => {
         e.preventDefault();
         setError('');
 
+        // Validate password length
+        if (formData.password.length < 8) {
+            setError('Password must be at least 8 characters');
+            return;
+        }
+
+        // Validate password match
         if (formData.password !== formData.confirmPassword) {
             setError("Passwords don't match");
             return;
@@ -25,15 +32,22 @@ const Register = () => {
         setLoading(true);
 
         try {
-            await axiosInstance.post('/auth/register', {
+            await axios.post('http://127.0.0.1:8000/api/users/register', {
                 username: formData.username,
-                email: formData.email,
-                password: formData.password
+                password: formData.password,
+                role: formData.role
             });
 
+            // Success - redirect to login
             navigate('/login');
         } catch (err) {
-            setError(err.message || 'Registration failed.');
+            if (err.response?.status === 409) {
+                setError('Username already exists. Please choose another one.');
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
+            } else {
+                setError(err.message || 'Registration failed. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
@@ -63,19 +77,9 @@ const Register = () => {
                             type="text"
                             required
                             className="w-full bg-background border border-text-muted/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            placeholder="Enter username"
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm text-text-muted mb-2">Email</label>
-                        <input
-                            type="email"
-                            required
-                            className="w-full bg-background border border-text-muted/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
                     </div>
 
@@ -84,10 +88,13 @@ const Register = () => {
                         <input
                             type="password"
                             required
+                            minLength={8}
                             className="w-full bg-background border border-text-muted/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            placeholder="Minimum 8 characters"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         />
+                        <p className="text-xs text-text-muted mt-1">Password must be at least 8 characters</p>
                     </div>
 
                     <div>
@@ -95,10 +102,25 @@ const Register = () => {
                         <input
                             type="password"
                             required
+                            minLength={8}
                             className="w-full bg-background border border-text-muted/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            placeholder="Re-enter password"
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm text-text-muted mb-2">Role</label>
+                        <select
+                            required
+                            className="w-full bg-background border border-text-muted/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            value={formData.role}
+                            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                        >
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
                     </div>
 
                     <button
