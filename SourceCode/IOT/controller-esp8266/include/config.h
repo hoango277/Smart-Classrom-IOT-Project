@@ -25,6 +25,7 @@
 #define TOPIC_BASE_ALARM_CMD "classroom/alarm/"
 #define TOPIC_OTA_UPDATE "classroom/ota/update"
 #define TOPIC_OTA_STATUS "classroom/ota/status"
+#define TOPIC_BASE_RAIN "classroom/rain/"
 
 #define MQTT_CLIENT_ID "smart-classroom-controller"
 #define MAX_TOPIC_LENGTH 96
