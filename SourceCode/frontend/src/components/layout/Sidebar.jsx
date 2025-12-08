@@ -4,11 +4,22 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = () => {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
+    const userRole = localStorage.getItem('role');
 
-    const navItems = [
+    // Base nav items
+    const baseNavItems = [
         { path: '/dashboard', icon: <HomeIcon />, label: 'Home' },
+    ];
+
+    // Admin-only items
+    const adminNavItems = [
         { path: '/ota', icon: <UpdateIcon />, label: 'OTA Update' },
     ];
+
+    // Combine nav items based on role (only admin can access OTA)
+    const navItems = userRole === 'admin'
+        ? [...baseNavItems, ...adminNavItems]
+        : baseNavItems;
 
     return (
         <div className="h-screen w-24 bg-background border-r border-surface flex flex-col items-center py-8 fixed left-0 top-0 z-50">

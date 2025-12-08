@@ -111,10 +111,13 @@ bool mqtt_reconnect()
 
     // Subscribe to all rain commands (close windows when raining)
     // Topic: classroom/rain/+/cmd
-    snprintf(topic, MAX_TOPIC_LENGTH, "%s+/cmd", TOPIC_BASE_RAIN);
-    mqttClient.subscribe(topic);
-    Serial.print("[MQTT] Subscribed: ");
-    Serial.println(topic);
+    for (int i = 0; i < NUM_ALARMS; ++i)
+    {
+      snprintf(topic, MAX_TOPIC_LENGTH, "%s%d/cmd", TOPIC_BASE_RAIN, i);
+      mqttClient.subscribe(topic);
+      Serial.print("[MQTT] Subscribed: ");
+      Serial.println(topic);
+    }
 
     return true;
   }
