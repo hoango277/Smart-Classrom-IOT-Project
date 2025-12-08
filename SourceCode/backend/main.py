@@ -3,7 +3,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from configs.database import Base, async_engine
 from models import *
-from routers import authentication, user
+from configs.firmware_storage import UPLOAD_DIR
+from routers import authentication, user, firmware
 
 app = FastAPI()
 
@@ -21,6 +22,7 @@ async def on_shutdown():
 
 app.include_router(authentication.router)
 app.include_router(user.router)
+app.include_router(firmware.router)
 
 app.add_middleware(
     CORSMiddleware,
