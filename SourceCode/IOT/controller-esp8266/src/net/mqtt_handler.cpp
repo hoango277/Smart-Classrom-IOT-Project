@@ -5,6 +5,30 @@
 #include "../drivers/doors.h"
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
+#include "../drivers/alarms.h"
+#include "../net/ota.h"
+
+static void handle_ota_update(const String &message)
+{
+  // Expected message format: {"url": "http://your-server.com/api/firmware/download"}
+  JsonDocument doc;
+  DeserializationError error = deserializeJson(doc, message);
+
+  if (!error && doc.containsKey("url"))
+  {
+    String firmwareUrl = doc["url"].as<String>();
+    Serial.print("[MQTT] OTA update requested from: ");
+    Serial.println(firmwareUrl);
+
+    // Trigger OTA update
+    ota_trigger_update(firmwareUrl.c_str());
+  }
+  else
+  {
+    Serial.println("[MQTT] Invalid OTA message format");
+    mqtt_publish(TOPIC_OTA_STATUS, "{\"status\":\"failed\",\"reason\":\"invalid_format\"}");
+  }
+}
 
 // Helper functions for specific device types
 static void handle_door_command(int deviceId, const String &message)
@@ -71,7 +95,11 @@ void mqtt_process_message(const char *topic, const String &message)
   int deviceId = -1;
 
   // Dispatch based on topic
-  if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
+  if (!strcmp(topic, TOPIC_OTA_UPDATE))
+  {
+    handle_ota_update(message);
+  }
+  else if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
   {
     handle_door_command(deviceId, message);
   }
@@ -89,9 +117,6 @@ void mqtt_process_message(const char *topic, const String &message)
   }
   else if (topic_parse_id(topic, TOPIC_BASE_RAIN, &deviceId))
   {
-    // Check if it's the right base format.
-    // topic_parse_id handles "base + ID + /cmd" check.
-    // So topic must be "classroom/rain/ID/cmd".
     handle_rain_command(deviceId, message);
   }
 }

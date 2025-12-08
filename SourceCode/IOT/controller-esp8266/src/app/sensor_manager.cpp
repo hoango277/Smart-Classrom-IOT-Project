@@ -12,6 +12,9 @@
 static unsigned long lastSensorRead = 0;
 // Rain State
 static bool lastRainState = false;
+static bool rainClosingActive = false;
+static unsigned long rainCloseStart = 0;
+static bool allWindowsClosed = false;
 
 // Fire Alarm State
 static bool fireActive = false;
@@ -42,6 +45,7 @@ static void trigger_fire_start() {
   // 1. Open All Doors & Windows
   for (int i = 0; i < NUM_DOORS; ++i) door_open(i);
   for (int i = 0; i < NUM_WINDOWS; ++i) window_open(i);
+  allWindowsClosed = false;
 
   // 2. Initial Buzzer/Light ON
   buzzer_on();
@@ -49,11 +53,10 @@ static void trigger_fire_start() {
 
   // 3. Publish
   char topic[MAX_TOPIC_LENGTH];
-  snprintf(topic, MAX_TOPIC_LENGTH, "%s0", TOPIC_BASE_ALARM_CMD);
+  snprintf(topic, MAX_TOPIC_LENGTH, "%s0/cmd", TOPIC_BASE_ALARM_CMD);
   // Remove "/cmd" from base? No, existing config might vary. 
   // Config: TOPIC_BASE_ALARM_CMD "classroom/alarm/"
-  // We want to publish status to "classroom/alarm/0". 
-  // It matches the ID structure.
+  // We want to publish status to "classroom/alarm/0/cmd" to match command topics.
   mqtt_publish(topic, "detected");
 }
 
@@ -73,7 +76,7 @@ static void trigger_fire_stop() {
   
   // Publish
   char topic[MAX_TOPIC_LENGTH];
-  snprintf(topic, MAX_TOPIC_LENGTH, "%s0", TOPIC_BASE_ALARM_CMD);
+  snprintf(topic, MAX_TOPIC_LENGTH, "%s0/cmd", TOPIC_BASE_ALARM_CMD);
   mqtt_publish(topic, "cleared");
 }
 
@@ -140,24 +143,41 @@ void sensor_manager_tick()
     }
   }
 
+  // Rain auto-close timing (run each tick, independent of sensor poll interval)
+  if (rainClosingActive) {
+    unsigned long now = millis();
+    if (now - rainCloseStart >= 3000) {
+      Serial.println("[SensorManager] Rain auto-close timeout reached, stopping doors.");
+      for (int i = 0; i < NUM_WINDOWS; ++i) window_stop(i);
+      rainClosingActive = false;
+    }
+  }
+
   // --- Rain Sensor Logic (Lower Priority) ---
   if (millis() - lastSensorRead >= 200) {
     lastSensorRead = millis(); // Update timestamp for 200ms poll
 
+
     bool rain = read_rain();
-    if (rain != lastRainState) {
-      lastRainState = rain;
-      if (rain) {
-        Serial.println("[SensorManager] Rain DETECTED!");
-        char topic[MAX_TOPIC_LENGTH];
-        snprintf(topic, MAX_TOPIC_LENGTH, "%s0", TOPIC_BASE_RAIN);
-        mqtt_publish(topic, "detected");
-      } else {
-        Serial.println("[SensorManager] Rain cleared.");
-        char topic[MAX_TOPIC_LENGTH];
-        snprintf(topic, MAX_TOPIC_LENGTH, "%s0", TOPIC_BASE_RAIN);
-        mqtt_publish(topic, "cleared");
-      }
+    // Check if rain is detected AND windows are not already closed (or haven't been closed by this logic yet)
+    if (rain && !allWindowsClosed) {
+      Serial.println("[SensorManager] Rain DETECTED! Closing all doors for 3s.");
+      rainClosingActive = true;
+      rainCloseStart = millis();
+      for (int i = 0; i < NUM_WINDOWS; ++i) window_close(i);
+      char topic[MAX_TOPIC_LENGTH];
+      snprintf(topic, MAX_TOPIC_LENGTH, "%s0/cmd", TOPIC_BASE_RAIN);
+      mqtt_publish(topic, "detected");
+      allWindowsClosed = true;
+    } 
+    // If rain is NOT detected, but we thought they were closed due to rain, reset the flag
+    else if (!rain && allWindowsClosed) {
+      Serial.println("[SensorManager] Rain cleared.");
+      char topic[MAX_TOPIC_LENGTH];
+      snprintf(topic, MAX_TOPIC_LENGTH, "%s0/cmd", TOPIC_BASE_RAIN);
+      mqtt_publish(topic, "cleared");
+      allWindowsClosed = false;
     }
+    lastRainState = rain; // Keep tracking last state if needed for debugging or other logic
   }
 }
