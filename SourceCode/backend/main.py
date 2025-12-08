@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from configs.database import Base, async_engine
-from configs.firmware_storage import UPLOAD_DIR
 from models import *
+from configs.firmware_storage import UPLOAD_DIR
 from routers import authentication, user, firmware
 
 app = FastAPI()
