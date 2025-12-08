@@ -4,6 +4,7 @@ import DoorWidget from '../components/dashboard/DoorWidget';
 import WindowWidget from '../components/dashboard/WindowWidget';
 import LightWidget from '../components/dashboard/LightWidget';
 import TemperatureWidget from '../components/dashboard/TemperatureWidget';
+import EnvironmentHistory from '../components/dashboard/EnvironmentHistory';
 
 const Home = () => {
     // Read config from env
@@ -43,10 +44,12 @@ const Home = () => {
                     <div className="col-span-12 lg:col-span-12 flex flex-col gap-10">
 
                         {/* Temp & Status Row */}
-                        <div className="grid grid-cols-1 gap-10 h-48">
+                        <div className="grid grid-cols-1 gap-10 h-56">
                             {/* Keep Temperature Widget */}
                             <TemperatureWidget />
                         </div>
+
+                        <EnvironmentHistory />
 
                         {/* Devices Row (Single Widget with Selector) */}
                         <div className="space-y-8">
