@@ -1,43 +1,17 @@
 import mqtt from 'mqtt';
 
-const getEnv = (key, fallback) => {
-  const value =
-    import.meta?.env?.[key] ??
-    (typeof process !== 'undefined' ? process.env?.[key] : undefined);
-  return value !== undefined ? value : fallback;
-};
-
-const mqttHost = getEnv('VITE_MQTT_HOST', getEnv('MQTT_HOST'));
-const mqttPort = Number(
-  getEnv('VITE_MQTT_WEB_SOCKET_PORT', getEnv('MQTT_WEB_SOCKET_PORT', 8884))
-);
-const mqttUser = getEnv('VITE_MQTT_USER', getEnv('MQTT_USER'));
-const mqttPass = getEnv('VITE_MQTT_PASS', getEnv('MQTT_PASS'));
-const mqttClientId = getEnv(
-  'VITE_MQTT_CLIENT_ID',
-  getEnv('MQTT_CLIENT_ID', 'smart_classroom_frontend')
-);
-const maxTopicLength =
-  Number(getEnv('VITE_MAX_TOPIC_LENGTH', getEnv('MAX_TOPIC_LENGTH', 96))) || 96;
+const mqttHost = import.meta.env.VITE_MQTT_HOST;
+const mqttPort = Number(import.meta.env.VITE_MQTT_WEB_SOCKET_PORT || 8884);
+const mqttUser = import.meta.env.VITE_MQTT_USER;
+const mqttPass = import.meta.env.VITE_MQTT_PASS;
+const mqttClientId = import.meta.env.VITE_MQTT_CLIENT_ID || 'smart_classroom_frontend';
+const maxTopicLength = Number(import.meta.env.VITE_MAX_TOPIC_LENGTH || 96);
 
 export const topics = {
-  events: getEnv('VITE_TOPIC_EVENTS', getEnv('TOPIC_EVENTS')),
-  doorCmd: getEnv(
-    'VITE_TOPIC_BASE_DOOR_CMD',
-    getEnv('TOPIC_BASE_DOOR_CMD', 'classroom/door/')
-  ),
-  windowCmd: getEnv(
-    'VITE_TOPIC_BASE_WINDOW_CMD',
-    getEnv('TOPIC_BASE_WINDOW_CMD', 'classroom/window/')
-  ),
-  lightCmd: getEnv(
-    'VITE_TOPIC_BASE_LIGHT_CMD',
-    getEnv('TOPIC_BASE_LIGHT_CMD', 'classroom/light/')
-  ),
-  alarmCmd: getEnv(
-    'VITE_TOPIC_BASE_ALARM_CMD',
-    getEnv('TOPIC_BASE_ALARM_CMD', 'classroom/alarm/')
-  ),
+  events: import.meta.env.VITE_TOPIC_EVENTS,
+  doorCmd: import.meta.env.VITE_TOPIC_BASE_DOOR_CMD || 'classroom/door/',
+  windowCmd: import.meta.env.VITE_TOPIC_BASE_WINDOW_CMD || 'classroom/window/',
+  lightCmd: import.meta.env.VITE_TOPIC_BASE_LIGHT_CMD || 'classroom/light/',
 };
 
 if (!mqttHost) {

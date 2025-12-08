@@ -1,16 +1,16 @@
-import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import UpdateOTA from './pages/UpdateOTA';
 
-function Router() {
+const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/dashboard" element={<Home />} />
+      <Route path="/ota" element={<UpdateOTA />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default Router 
+export default Router;
