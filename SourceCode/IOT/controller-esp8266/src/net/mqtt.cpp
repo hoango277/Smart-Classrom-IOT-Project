@@ -7,10 +7,7 @@
 #include "mqtt.h"
 #include "../../include/config.h"
 #include "../../include/secrets.h"
-#include "../drivers/doors.h"
-#include "../drivers/windows.h"
-#include "../drivers/lights.h"
-#include "../drivers/alarms.h"
+#include "mqtt_handler.h"
 
 // MQTT client setup
 WiFiClientSecure espClient;
@@ -107,6 +104,13 @@ bool mqtt_reconnect()
       Serial.println(topic);
     }
 
+    // Subscribe to all rain commands (close windows when raining)
+    // Topic: classroom/rain/+/cmd
+    snprintf(topic, MAX_TOPIC_LENGTH, "%s+/cmd", TOPIC_BASE_RAIN);
+    mqttClient.subscribe(topic);
+    Serial.print("[MQTT] Subscribed: ");
+    Serial.println(topic);
+
     return true;
   }
   else
@@ -130,47 +134,7 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
   Serial.print("]: ");
   Serial.println(message);
 
-  int deviceId = -1;
-  // Handle door commands
-  if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
-  {
-    if (message == "open")
-      door_open(deviceId);
-    else if (message == "close")
-      door_close(deviceId);
-    else if (message == "stop")
-      door_stop(deviceId);
-  }
-  // Handle window commands
-  else if (topic_parse_id(topic, TOPIC_BASE_WINDOW_CMD, &deviceId))
-  {
-    if (message == "open")
-      window_open(deviceId);
-    else if (message == "close")
-      window_close(deviceId);
-    else if (message == "stop")
-      window_stop(deviceId);
-  }
-  // Handle light commands
-  else if (topic_parse_id(topic, TOPIC_BASE_LIGHT_CMD, &deviceId))
-  {
-    if (message == "on")
-      light_on(deviceId);
-    else if (message == "off")
-      light_off(deviceId);
-    else if (message == "toggle")
-      light_toggle(deviceId);
-  }
-  // Handle alarm commands
-  else if (topic_parse_id(topic, TOPIC_BASE_ALARM_CMD, &deviceId))
-  {
-    if (message == "on")
-      alarm_on(deviceId);
-    else if (message == "off")
-      alarm_off(deviceId);
-    else if (message == "toggle")
-      alarm_toggle(deviceId);
-  }
+  mqtt_process_message(topic, message);
 }
 
 void mqtt_publish_sensor(JsonDocument &doc)
