@@ -121,6 +121,7 @@ void sensor_manager_tick()
     if (!doorsStopped && (now - fireStartTime > 3000)) {
       Serial.println("[SensorManager] Stopping doors after 3s safety timeout.");
       for (int i = 0; i < NUM_DOORS; ++i) door_stop(i);
+      for(int i = 0; i < NUM_WINDOWS; ++i) window_stop(i);
       doorsStopped = true;
     }
 
