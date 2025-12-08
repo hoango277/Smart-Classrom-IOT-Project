@@ -8,3 +8,6 @@
 #define MQTT_PORT 1883
 #define MQTT_USER "mqtt-user"
 #define MQTT_PASS "mqtt-pass"
+
+#define OTA_VERSION_URL "http://127.0.0.1:8000/api/firmware/version"
+#define OTA_DOWNLOAD_URL "http://127.0.0.1:8000/api/firmware/download"

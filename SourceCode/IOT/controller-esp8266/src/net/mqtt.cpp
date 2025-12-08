@@ -11,6 +11,7 @@
 #include "../drivers/windows.h"
 #include "../drivers/lights.h"
 #include "../drivers/alarms.h"
+#include "../net/ota.h"
 
 // MQTT client setup
 WiFiClientSecure espClient;
@@ -71,6 +72,11 @@ bool mqtt_reconnect()
     // Subscribe to command topics
     char topic[MAX_TOPIC_LENGTH];
 
+    // Subscribe to OTA update topic
+    mqttClient.subscribe(TOPIC_OTA_UPDATE);
+    Serial.print("[MQTT] Subscribed: ");
+    Serial.println(TOPIC_OTA_UPDATE);
+
     // Subscribe to all door commands
     for (int i = 0; i < NUM_DOORS; ++i)
     {
@@ -130,7 +136,33 @@ void mqtt_callback(char *topic, byte *payload, unsigned int length)
   Serial.print("]: ");
   Serial.println(message);
 
+  // Parse device ID from topic
   int deviceId = -1;
+
+  // Handle OTA update command
+  // if (strcmp(topic, TOPIC_OTA_UPDATE) == 0)
+  // {
+  //   // Expected message format: {"url": "http://your-server.com/api/firmware/download"}
+  //   JsonDocument doc;
+  //   DeserializationError error = deserializeJson(doc, message);
+
+  //   if (!error && doc.containsKey("url"))
+  //   {
+  //     String firmwareUrl = doc["url"].as<String>();
+  //     Serial.print("[MQTT] OTA update requested from: ");
+  //     Serial.println(firmwareUrl);
+
+  //     // Trigger OTA update
+  //     ota_trigger_update(firmwareUrl.c_str());
+  //   }
+  //   else
+  //   {
+  //     Serial.println("[MQTT] Invalid OTA message format");
+  //     mqtt_publish(TOPIC_OTA_STATUS, "{\"status\":\"failed\",\"reason\":\"invalid_format\"}");
+  //   }
+  //   return;
+  // }
+
   // Handle door commands
   if (topic_parse_id(topic, TOPIC_BASE_DOOR_CMD, &deviceId))
   {

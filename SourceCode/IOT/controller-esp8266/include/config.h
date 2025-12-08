@@ -23,11 +23,13 @@
 #define TOPIC_BASE_WINDOW_CMD "classroom/window/"
 #define TOPIC_BASE_LIGHT_CMD "classroom/light/"
 #define TOPIC_BASE_ALARM_CMD "classroom/alarm/"
+#define TOPIC_OTA_UPDATE "classroom/ota/update"
+#define TOPIC_OTA_STATUS "classroom/ota/status"
 
 #define MQTT_CLIENT_ID "smart-classroom-controller"
 #define MAX_TOPIC_LENGTH 96
 
-#define MQTT_HOST "e5b0f46cb77d48c783a870d85ddabdd2.s1.eu.hivemq.cloud"
+#define MQTT_HOST "3ee91461277b4c8ea515775a3473e668.s1.eu.hivemq.cloud"
 #define MQTT_PORT 8883
 #define MQTT_USER "smart_classroom"
 #define MQTT_PASS "Smartclassroom15"
