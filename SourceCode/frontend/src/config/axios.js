@@ -12,8 +12,8 @@ const axiosInstance = axios.create({
 // Request interceptor để thêm authorization token (nếu cần)
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Có thể thêm token vào header tại đây
-    const token = localStorage.getItem('token');
+    // Thêm access token vào header
+    const token = localStorage.getItem('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -32,11 +32,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Xử lý lỗi chung
     if (error.response?.status === 401) {
-      // Token hết hạn, có thể redirect về login
-      localStorage.removeItem('token');
+      // Token hết hạn, redirect về login
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('token_type');
+      localStorage.removeItem('username');
+      localStorage.removeItem('role');
       window.location.href = '/login';
     }
-    
+
     // Trả về lỗi với thông tin dễ đọc
     const errorMessage = error.response?.data?.message || error.message || 'Có lỗi xảy ra';
     return Promise.reject(new Error(errorMessage));

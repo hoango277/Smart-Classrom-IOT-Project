@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from '../config/axios';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -37,6 +38,23 @@ const Login = () => {
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('token_type', response.data.token_type);
                 localStorage.setItem('username', formData.username);
+
+                // Fetch user profile to get role
+                try {
+                    const profileResponse = await axiosInstance.get('/users/me', {
+                        headers: {
+                            'Authorization': `Bearer ${response.data.access_token}`
+                        }
+                    });
+
+                    // Response: { id: number, username: string, role: string }
+                    if (profileResponse.role) {
+                        localStorage.setItem('role', profileResponse.role);
+                    }
+                } catch (profileErr) {
+                    console.error('Failed to fetch user profile:', profileErr);
+                    // Continue anyway, role might not be required for basic access
+                }
             }
 
             navigate('/dashboard');

@@ -5,6 +5,7 @@ import UpdateOTA from './pages/UpdateOTA';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import AdminRoute from './components/common/AdminRoute';
 
 const Router = () => {
   return (
@@ -23,9 +24,9 @@ const Router = () => {
       <Route
         path="/ota"
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <UpdateOTA />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
     </Routes>

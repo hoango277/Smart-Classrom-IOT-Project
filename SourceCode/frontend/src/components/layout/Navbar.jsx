@@ -9,6 +9,7 @@ const Navbar = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('token_type');
         localStorage.removeItem('username');
+        localStorage.removeItem('role');
         navigate('/login');
     };
 
