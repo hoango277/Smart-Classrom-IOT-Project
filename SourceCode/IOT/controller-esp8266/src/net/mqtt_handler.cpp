@@ -117,9 +117,6 @@ void mqtt_process_message(const char *topic, const String &message)
   }
   else if (topic_parse_id(topic, TOPIC_BASE_RAIN, &deviceId))
   {
-    // Check if it's the right base format.
-    // topic_parse_id handles "base + ID + /cmd" check.
-    // So topic must be "classroom/rain/ID/cmd".
     handle_rain_command(deviceId, message);
   }
 }
