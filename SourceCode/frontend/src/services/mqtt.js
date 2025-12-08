@@ -34,10 +34,6 @@ export const topics = {
     'VITE_TOPIC_BASE_LIGHT_CMD',
     getEnv('TOPIC_BASE_LIGHT_CMD', 'classroom/light/')
   ),
-  alarmCmd: getEnv(
-    'VITE_TOPIC_BASE_ALARM_CMD',
-    getEnv('TOPIC_BASE_ALARM_CMD', 'classroom/alarm/')
-  ),
 };
 
 if (!mqttHost) {

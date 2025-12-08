@@ -15,10 +15,6 @@ const commandTopics = {
     base: normalizeBase(topics.lightCmd),
     allowed: ['on', 'off', 'toggle'],
   },
-  alarm: {
-    base: normalizeBase(topics.alarmCmd),
-    allowed: ['on', 'off', 'toggle'],
-  },
 };
 
 const ensureDeviceId = (deviceId) => {
@@ -76,13 +72,10 @@ export const publishWindowCommand = (deviceId, action) =>
 export const publishLightCommand = (deviceId, action) =>
   publishCommand('light', deviceId, action);
 
-export const publishAlarmCommand = (deviceId, action) =>
-  publishCommand('alarm', deviceId, action);
 
 export default {
   publishCommand,
   publishDoorCommand,
   publishWindowCommand,
   publishLightCommand,
-  publishAlarmCommand,
 };
