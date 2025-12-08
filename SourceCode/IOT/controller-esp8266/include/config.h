@@ -23,6 +23,7 @@
 #define TOPIC_BASE_WINDOW_CMD "classroom/window/"
 #define TOPIC_BASE_LIGHT_CMD "classroom/light/"
 #define TOPIC_BASE_ALARM_CMD "classroom/alarm/"
+#define TOPIC_BASE_RAIN "classroom/rain/"
 
 #define MQTT_CLIENT_ID "smart-classroom-controller"
 #define MAX_TOPIC_LENGTH 96

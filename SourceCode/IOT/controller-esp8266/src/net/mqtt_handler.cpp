@@ -1,4 +1,5 @@
 #include "mqtt_handler.h"
+#include "../app/sensor_manager.h"
 #include "mqtt.h"
 #include "../../include/config.h"
 #include "../drivers/doors.h"
@@ -39,12 +40,31 @@ static void handle_light_command(int deviceId, const String &message)
 
 static void handle_alarm_command(int deviceId, const String &message)
 {
-  if (message == "on")
-    alarm_on(deviceId);
-  else if (message == "off")
-    alarm_off(deviceId);
-  else if (message == "toggle")
-    alarm_toggle(deviceId);
+  // User req: Handle "detected" or "cleared" similar to fire logic
+  if (message == "detected" || message == "on")
+  {
+    Serial.println("[MQTT] Alarm CMD: DETECTED/ON");
+    sensor_manager_set_fire(true);
+  }
+  else if (message == "cleared" || message == "off")
+  {
+    Serial.println("[MQTT] Alarm CMD: CLEARED/OFF");
+    sensor_manager_set_fire(false);
+  }
+}
+
+static void handle_rain_command(int deviceId, const String &message)
+{
+  // If rain is detected (or any trigger message like "detected" or "on")
+  // We close ALL windows
+  if (message == "detected" || message == "on" || message == "close")
+  {
+    Serial.println("[MQTT] Rain alert received! Closing all windows...");
+    for (int i = 0; i < NUM_WINDOWS; ++i)
+    {
+      window_close(i);
+    }
+  }
 }
 
 void mqtt_process_message(const char *topic, const String &message)
@@ -67,5 +87,12 @@ void mqtt_process_message(const char *topic, const String &message)
   else if (topic_parse_id(topic, TOPIC_BASE_ALARM_CMD, &deviceId))
   {
     handle_alarm_command(deviceId, message);
+  }
+  else if (topic_parse_id(topic, TOPIC_BASE_RAIN, &deviceId))
+  {
+    // Check if it's the right base format.
+    // topic_parse_id handles "base + ID + /cmd" check.
+    // So topic must be "classroom/rain/ID/cmd".
+    handle_rain_command(deviceId, message);
   }
 }
