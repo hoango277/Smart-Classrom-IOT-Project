@@ -1,2 +1,2 @@
 from .user import User
-from .environment import EnvironmentReading
+from .environment import Environment
