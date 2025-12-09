@@ -26,22 +26,6 @@ const Navbar = () => {
 
             {/* Right Actions */}
             <div className="flex items-center gap-6">
-                {/* Search */}
-                <button className="text-text-muted hover:text-white transition-colors">
-                    <SearchIcon />
-                </button>
-
-                {/* Notifications */}
-                <button className="text-text-muted hover:text-white transition-colors relative">
-                    <BellIcon />
-                    <span className="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full"></span>
-                </button>
-
-                {/* Settings */}
-                <button className="text-text-muted hover:text-white transition-colors">
-                    <SettingsIcon />
-                </button>
-
                 {/* Logout */}
                 <button
                     onClick={handleLogout}
