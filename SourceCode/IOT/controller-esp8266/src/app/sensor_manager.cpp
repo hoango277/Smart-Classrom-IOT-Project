@@ -1,5 +1,6 @@
 #include "sensor_manager.h"
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include "../drivers/sensors.h"
 #include "../drivers/dht.h"
 #include "../drivers/buzzer.h"
@@ -10,6 +11,8 @@
 #include "../../include/config.h"
 
 static unsigned long lastSensorRead = 0;
+static unsigned long lastEnvPublish = 0;
+static const unsigned long ENV_PUBLISH_INTERVAL_MS = 5000;
 // Rain State
 static bool lastRainState = false;
 static bool rainClosingActive = false;
@@ -175,5 +178,24 @@ void sensor_manager_tick()
       allWindowsClosed = false;
     }
     lastRainState = rain; // Keep tracking last state if needed for debugging or other logic
+  }
+
+  // --- Temperature & Humidity publishing (5s throttle) ---
+  if (millis() - lastEnvPublish >= ENV_PUBLISH_INTERVAL_MS)
+  {
+    float humidity = dht_read_humidity();
+    float tempC = dht_read_temperature_c();
+
+    // Skip publish if sensor returned invalid reading
+    if (!isnan(humidity) && !isnan(tempC))
+    {
+      StaticJsonDocument<128> doc;
+      doc["type"] = "environment";
+      doc["temperature"] = tempC;
+      doc["humidity"] = humidity;
+      doc["ts"] = millis(); // Controller uptime; gateway can replace with server time if needed
+      mqtt_publish_sensor(doc);
+      lastEnvPublish = millis();
+    }
   }
 }

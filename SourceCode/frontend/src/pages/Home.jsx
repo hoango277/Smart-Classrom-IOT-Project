@@ -4,6 +4,7 @@ import DoorWidget from '../components/dashboard/DoorWidget';
 import WindowWidget from '../components/dashboard/WindowWidget';
 import LightWidget from '../components/dashboard/LightWidget';
 import TemperatureWidget from '../components/dashboard/TemperatureWidget';
+import EnvironmentHistory from '../components/dashboard/EnvironmentHistory';
 
 const Home = () => {
     // Read config from env
@@ -14,39 +15,18 @@ const Home = () => {
     return (
         <MainLayout>
             <div className="space-y-10">
-                {/* Header Section */}
-                <section className="bg-surface rounded-3xl p-10 relative overflow-hidden shadow-lg">
-                    <div className="relative z-10 max-w-lg">
-                        <h1 className="text-3xl font-bold text-white mb-2">Welcome home, Joe!</h1>
-                        <p className="text-text-muted text-sm mb-6">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod.
-                        </p>
-
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-2">
-                                <span className="text-4xl font-bold text-white">+30°C</span>
-                                <span className="text-2xl">☁️</span>
-                            </div>
-                            <div className="text-xs text-text-muted">
-                                <div>Outdoor temperature</div>
-                                <div>Fuzzy cloudy weather</div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Decorative blob */}
-                    <div className="absolute top-0 right-0 w-64 h-full bg-gradient-to-l from-primary/20 to-transparent"></div>
-                </section>
-
                 {/* Dashboard Grid */}
                 <div className="grid grid-cols-12 gap-10">
                     {/* Left Column (Widgets) */}
                     <div className="col-span-12 lg:col-span-12 flex flex-col gap-10">
 
                         {/* Temp & Status Row */}
-                        <div className="grid grid-cols-1 gap-10 h-48">
+                        <div className="grid grid-cols-1 gap-10 h-56">
                             {/* Keep Temperature Widget */}
                             <TemperatureWidget />
                         </div>
+
+                        <EnvironmentHistory />
 
                         {/* Devices Row (Single Widget with Selector) */}
                         <div className="space-y-8">
