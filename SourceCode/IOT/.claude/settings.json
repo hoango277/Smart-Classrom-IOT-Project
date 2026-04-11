@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/HoaNgo/Desktop/Smart-Classrom-IOT-Project/SourceCode//**)",
+      "Bash(xargs ls:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\HoaNgo\\Desktop\\Smart-Classrom-IOT-Project\\SourceCode\\frontend\\src\\services",
+      "c:\\Users\\HoaNgo\\Desktop\\Smart-Classrom-IOT-Project\\SourceCode\\frontend\\src\\pages",
+      "c:\\Users\\HoaNgo\\Desktop\\Smart-Classrom-IOT-Project\\SourceCode\\frontend\\src",
+      "c:\\Users\\HoaNgo\\Desktop\\Smart-Classrom-IOT-Project\\SourceCode\\frontend"
+    ]
+  }
+}

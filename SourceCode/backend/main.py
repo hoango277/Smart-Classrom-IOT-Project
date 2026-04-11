@@ -4,7 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 from configs.database import async_engine, init_db
 from models import *
 from configs.firmware_storage import UPLOAD_DIR
-from routers import authentication, user, firmware, environment
+from routers import authentication, user, firmware, environment, nfc_card, access_log
 
 app = FastAPI()
 
@@ -23,6 +23,8 @@ app.include_router(authentication.router)
 app.include_router(user.router)
 app.include_router(firmware.router)
 app.include_router(environment.router)
+app.include_router(nfc_card.router)
+app.include_router(access_log.router)
 
 app.add_middleware(
     CORSMiddleware,

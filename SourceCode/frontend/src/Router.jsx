@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import UpdateOTA from './pages/UpdateOTA';
+import NFCManagement from './pages/NFCManagement';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -26,6 +27,14 @@ const Router = () => {
         element={
           <AdminRoute>
             <UpdateOTA />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/nfc"
+        element={
+          <AdminRoute>
+            <NFCManagement />
           </AdminRoute>
         }
       />
