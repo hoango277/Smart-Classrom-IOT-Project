@@ -8,5 +8,3 @@
 #define MQTT_PORT 1883
 #define MQTT_USER "mqtt-user"
 #define MQTT_PASS "mqtt-pass"
-
-#define FACE_VERIFY_URL "https://api.example.com/face/verify"
