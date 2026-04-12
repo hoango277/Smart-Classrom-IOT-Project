@@ -30,6 +30,8 @@ void app_tick()
   wifi_loop();
   mqtt_loop();
 
+  doors_tick();
+  windows_tick();
   utils_tick();
   sensor_manager_tick();
 }

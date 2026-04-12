@@ -6,7 +6,6 @@
 #include <ArduinoJson.h>
 #include "mqtt.h"
 #include "../../include/config.h"
-#include "../../include/secrets.h"
 #include "mqtt_handler.h"
 
 // MQTT client setup

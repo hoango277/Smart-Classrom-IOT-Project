@@ -2,8 +2,8 @@
 #pragma once
 
 // WiFi Configuration
-#define WIFI_SSID "Đừng Kêu Tên Anh"
-#define WIFI_PASS "hoango277"
+#define WIFI_SSID "MOT CAI KHO"
+#define WIFI_PASS "xincamon"
 
 // MQTT Configuration
 #define MQTT_HOST      "3ee91461277b4c8ea515775a3473e668.s1.eu.hivemq.cloud"

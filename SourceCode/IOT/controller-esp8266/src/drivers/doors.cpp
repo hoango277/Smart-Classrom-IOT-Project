@@ -4,13 +4,16 @@
 #include "../../include/pins.h"
 #include "doors.h"
 
+static unsigned long door_start[NUM_DOORS] = {0};
+static bool door_running[NUM_DOORS] = {false};
+
 static bool valid_id(int id)
 {
   return id >= 0  && id < NUM_DOORS;
 }
 
 static bool wired(int id)
-{;
+{
   return DOOR_PINS[id].in1_pin != UNUSED_PIN && DOOR_PINS[id].in2_pin != UNUSED_PIN;
 }
 
@@ -49,8 +52,9 @@ void door_open(int id)
     return;
   }
   const MotorPins &p = DOOR_PINS[id];
-  // Direction: IN1=HIGH, IN2=LOW -> open
   set_outputs(p, HIGH, LOW);
+  door_start[id] = millis();
+  door_running[id] = true;
 }
 
 void door_close(int id)
@@ -62,8 +66,9 @@ void door_close(int id)
     return;
   }
   const MotorPins &p = DOOR_PINS[id];
-  // Direction: IN1=LOW, IN2=HIGH -> close
   set_outputs(p, LOW, HIGH);
+  door_start[id] = millis();
+  door_running[id] = true;
 }
 
 void door_stop(int id)
@@ -74,6 +79,19 @@ void door_stop(int id)
   }
   const MotorPins &p = DOOR_PINS[id];
   set_outputs(p, LOW, LOW);
+  door_running[id] = false;
   Serial.print("[door] stop called for id ");
   Serial.println(id);
+}
+
+void doors_tick()
+{
+  unsigned long now = millis();
+  for (int i = 0; i < NUM_DOORS; ++i)
+  {
+    if (door_running[i] && (now - door_start[i] >= DOOR_MOVE_MS))
+    {
+      door_stop(i);
+    }
+  }
 }
