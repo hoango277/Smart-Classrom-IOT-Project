@@ -9,7 +9,6 @@
 #include "ota.h"
 #include "mqtt.h"
 #include "../../include/config.h"
-#include "../../include/secrets.h"
 
 // Firmware version
 #define FIRMWARE_VERSION "1.0.0"

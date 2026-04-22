@@ -2,11 +2,11 @@
 #pragma once
 
 // WiFi Configuration
-#define WIFI_SSID "Duy Anh"
-#define WIFI_PASS "22122004"
+#define WIFI_SSID "MOT CAI KHO"
+#define WIFI_PASS "xincamon"
 
-#define DOOR_MOVE_MS 5000
-#define WINDOW_MOVE_MS 5000
+#define DOOR_MOVE_MS 3000
+#define WINDOW_MOVE_MS 3000
 #define AUTO_CLOSE_MS 30000
 #define CAPTURE_INTERVAL_MS 10000
 
@@ -34,3 +34,5 @@
 #define MQTT_PORT 8883
 #define MQTT_USER "smart_classroom"
 #define MQTT_PASS "Smartclassroom15"
+#define OTA_VERSION_URL "http://127.0.0.1:8000/api/firmware/version"
+#define OTA_DOWNLOAD_URL "http://127.0.0.1:8000/api/firmware/download"

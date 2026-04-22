@@ -3,6 +3,9 @@
 #include "../../include/pins.h"
 #include "windows.h"
 
+static unsigned long window_start[NUM_WINDOWS] = {0};
+static bool window_running[NUM_WINDOWS] = {false};
+
 static bool valid_id(int id)
 {
   return id >= 0 && id < NUM_WINDOWS;
@@ -48,8 +51,9 @@ void window_open(int id)
     return;
   }
   const MotorPins &p = WINDOW_PINS[id];
-  // Direction: IN1=HIGH, IN2=LOW -> open
   set_outputs(p, HIGH, LOW);
+  window_start[id] = millis();
+  window_running[id] = true;
 }
 
 void window_close(int id)
@@ -61,8 +65,9 @@ void window_close(int id)
     return;
   }
   const MotorPins &p = WINDOW_PINS[id];
-  // Direction: IN1=LOW, IN2=HIGH -> close
   set_outputs(p, LOW, HIGH);
+  window_start[id] = millis();
+  window_running[id] = true;
 }
 
 void window_stop(int id)
@@ -73,6 +78,19 @@ void window_stop(int id)
   }
   const MotorPins &p = WINDOW_PINS[id];
   set_outputs(p, LOW, LOW);
+  window_running[id] = false;
   Serial.print("[window] stop called for id ");
   Serial.println(id);
+}
+
+void windows_tick()
+{
+  unsigned long now = millis();
+  for (int i = 0; i < NUM_WINDOWS; ++i)
+  {
+    if (window_running[i] && (now - window_start[i] >= WINDOW_MOVE_MS))
+    {
+      window_stop(i);
+    }
+  }
 }
